@@ -9,7 +9,9 @@ import com.bus.routes.domain.Route
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.route_item_list.view.*
 
-class RoutesListAdapter : RecyclerView.Adapter<RoutesListAdapter.RouteViewHolder>() {
+
+class RoutesListAdapter(var mRouteListener: RouteItemListener) : RecyclerView.Adapter<RoutesListAdapter.RouteViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RouteViewHolder {
         val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.route_item_list, parent, false)
@@ -17,7 +19,7 @@ class RoutesListAdapter : RecyclerView.Adapter<RoutesListAdapter.RouteViewHolder
     }
 
     override fun onBindViewHolder(holder: RouteViewHolder, position: Int) {
-        holder.bindViews(mListRoutes!![position])
+        holder.bindViews(mListRoutes!![position], mRouteListener)
     }
 
     private var mListRoutes: ArrayList<Route>? = null
@@ -40,12 +42,20 @@ class RoutesListAdapter : RecyclerView.Adapter<RoutesListAdapter.RouteViewHolder
     class RouteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val labName = view.lab_route_name
         val labDescription = view.lab_route_description
+        val itemRoute = view.item_route
         val imgRoute = view.img_route
 
-        fun bindViews(route: Route) {
+        fun bindViews(route: Route, mRouteListener: RouteItemListener) {
+            itemRoute.setOnClickListener {
+                mRouteListener.onItemClick(route)
+            }
             labName.text = route.name
             labDescription.text = route.description
             Picasso.get().load(route.img_url).into(imgRoute)
         }
+    }
+
+    interface RouteItemListener {
+        fun onItemClick(route: Route)
     }
 }

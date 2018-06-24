@@ -8,6 +8,7 @@ import com.bus.routes.application.RoutesApplication
 import com.bus.routes.component.ActivityComponent
 import com.bus.routes.component.DaggerActivityComponent
 import com.bus.routes.domain.Route
+import com.bus.routes.domain.Stop
 import com.bus.routes.module.ActivityModule
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -22,7 +23,14 @@ import kotlinx.android.synthetic.main.bottom_sheet.*
 import javax.inject.Inject
 
 
-class RoutesActivity : AppCompatActivity(), OnMapReadyCallback, RoutesActivityContract.View {
+class RoutesActivity : AppCompatActivity(), OnMapReadyCallback, RoutesActivityContract.View ,RoutesListAdapter.RouteItemListener{
+    override fun showStopsByRoute(stopsArrayList: ArrayList<Stop>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onItemClick(route: Route) {
+            mPresenter.getStops(route.stops_url)
+    }
 
     @Inject
     lateinit var mPresenter: RoutesActivityPresenter
@@ -52,7 +60,7 @@ class RoutesActivity : AppCompatActivity(), OnMapReadyCallback, RoutesActivityCo
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        adapter = RoutesListAdapter()
+        adapter = RoutesListAdapter(this)
         recycler_routes.layoutManager = LinearLayoutManager(this)
         recycler_routes.adapter = adapter
 
