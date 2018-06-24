@@ -1,6 +1,5 @@
 package com.bus.routes.showroutes
 
-import com.bus.routes.domain.Stop
 import com.bus.routes.module.NetworkModule
 import com.bus.routes.net.responses.RoutesResponse
 import com.bus.routes.net.responses.StopsResponse

@@ -1,5 +1,6 @@
 package com.bus.routes.showroutes
 
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -21,23 +22,46 @@ import java.util.ArrayList
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import javax.inject.Inject
+import com.google.android.gms.maps.model.PolylineOptions
+import android.support.design.widget.BottomSheetBehavior
+import android.view.View
+import com.google.android.gms.maps.model.Polyline
 
 
-class RoutesActivity : AppCompatActivity(), OnMapReadyCallback, RoutesActivityContract.View ,RoutesListAdapter.RouteItemListener{
+class RoutesActivity : AppCompatActivity(), OnMapReadyCallback, RoutesActivityContract.View, RoutesListAdapter.RouteItemListener {
+
     override fun showStopsByRoute(stopsArrayList: ArrayList<Stop>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        for (mPolyline in mPolylines) {
+            mPolyline.remove()
+        }
+        mMap.clear()
+        val points: ArrayList<LatLng> = ArrayList()
+        val lineOptions = PolylineOptions()
+        for (stop in stopsArrayList) {
+            val position = LatLng(stop.lat, stop.lng)
+            points.add(position)
+            mMap.addMarker(MarkerOptions().position(position))
+        }
+        lineOptions.addAll(points)
+        lineOptions.width(10f)
+        lineOptions.color(Color.RED)
+        mPolylines.add( this.mMap.addPolyline(lineOptions))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(stopsArrayList.first().lat, stopsArrayList.first().lng), 16.0f))
+
     }
 
+
     override fun onItemClick(route: Route) {
-            mPresenter.getStops(route.stops_url)
+        val bottomSheetBehavior = BottomSheetBehavior.from<View>(bottom_sheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        mPresenter.getStops(route.stops_url)
     }
 
     @Inject
     lateinit var mPresenter: RoutesActivityPresenter
-
     lateinit var adapter: RoutesListAdapter
     private var activityComponent: ActivityComponent? = null
-
+    var mPolylines = ArrayList<Polyline>()
 
     override fun showSchoolsList(schoolArrayList: ArrayList<Route>) {
         adapter.updateList(schoolArrayList)
@@ -50,11 +74,9 @@ class RoutesActivity : AppCompatActivity(), OnMapReadyCallback, RoutesActivityCo
     }
 
     private lateinit var mMap: GoogleMap
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getActivityComponent()!!.inject(this)
-
         setContentView(R.layout.activity_main)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -65,6 +87,7 @@ class RoutesActivity : AppCompatActivity(), OnMapReadyCallback, RoutesActivityCo
         recycler_routes.adapter = adapter
 
     }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -81,6 +104,7 @@ class RoutesActivity : AppCompatActivity(), OnMapReadyCallback, RoutesActivityCo
         // mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(bogota, 10.0f))
     }
+
     fun getActivityComponent(): ActivityComponent? {
         if (activityComponent == null) {
             activityComponent = DaggerActivityComponent.builder()
