@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BusRoutes</string>
-    <string name="title_activity_main">Map</string>
+    <string name="title_activity_main">Routes</string>
+    <string name="lab_choose_route">Choose a route to see stops</string>
 </resources>

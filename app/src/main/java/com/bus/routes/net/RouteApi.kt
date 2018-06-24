@@ -7,6 +7,6 @@ import retrofit2.http.GET
 
 interface RouteApi {
 
-    @GET
+    @GET("10yg1t")
     fun getRoutes():Observable<RoutesResponse>
 }

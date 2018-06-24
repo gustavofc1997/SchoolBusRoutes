@@ -15,11 +15,13 @@ import javax.inject.Singleton
 @Singleton
 class NetworkModule @Inject
 constructor() {
-    var ApiBaseUrl = "https://api.myjson.com/bins/10yg1t"
+    var ApiBaseUrl = "https://api.myjson.com/bins/"
 
-    lateinit var mApi: RouteApi
+    /**
+     *
+     */
 
-    init {
+    fun getapi(): RouteApi {
         val okHttpClient = OkHttpClient().newBuilder()
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
@@ -30,7 +32,7 @@ constructor() {
                 .create()
         val retrofit = Retrofit.Builder().baseUrl(ApiBaseUrl).client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson)).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build()
-        mApi = retrofit.create(RouteApi::class.java)
+        return retrofit.create(RouteApi::class.java)
 
     }
 
