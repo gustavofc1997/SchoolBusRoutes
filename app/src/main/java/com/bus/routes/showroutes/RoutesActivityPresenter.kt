@@ -56,11 +56,11 @@ class RoutesActivityPresenter @Inject internal constructor(var mNetworkModule: N
     }
 
     fun onRoutesError(error: Throwable) {
-
+        mView.showErrorLoadRoutesList()
     }
 
     fun onStopError(error: Throwable) {
-
+        mView.showErrorLoadRoutesList()
     }
 
 

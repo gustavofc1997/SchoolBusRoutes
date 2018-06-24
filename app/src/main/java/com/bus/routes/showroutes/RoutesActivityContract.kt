@@ -13,6 +13,8 @@ interface RoutesActivityContract {
 
         fun showSchoolsList(schoolArrayList: ArrayList<Route>)
         fun showStopsByRoute(stopsArrayList: ArrayList<Stop>)
+        fun showErrorLoadRoutesList()
+        fun showErrorLoadStops()
     }
 
     interface Presenter : BasePresenter<View> {

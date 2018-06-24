@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">BusRoutes</string>
-    <string name="title_activity_main">Routes</string>
+    <string name="title_activity_main">Bus Routes</string>
     <string name="lab_choose_route">Choose a route to see stops</string>
+    <string name="msg_failure_routes">Something went wrong getting routes</string>
+    <string name="msg_failure_stops">Something went wrong getting stops</string>
 </resources>

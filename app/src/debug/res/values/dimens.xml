@@ -7,5 +7,6 @@
     <dimen name="text_description_size">15sp</dimen>
     <dimen name="padding_common">8dp</dimen>
     <dimen name="padding_minor">4dp</dimen>
+    <dimen name="padding_micro">2dp</dimen>
 
 </resources>
